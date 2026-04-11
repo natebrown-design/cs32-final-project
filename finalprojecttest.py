@@ -7,7 +7,7 @@ games = {
     "Overwatch": {"shooter", "multiplayer", "hero"},
     "Halo Infinite": {"shooter", "multiplayer", "sci-fi"},
     "Stardew Valley": {"indie", "farming", "singleplayer"},
-    "Minecraft": {"sandbox", "open-world", "multiplayer"},
+    "Minecraft": {"sandbox", "open-world", "multiplayer"}, # these list of tags for each game would ideally be longer and organized (genre, number of players, etc.)
     "Hades": {"indie", "roguelike", "singleplayer"},
 }
 
