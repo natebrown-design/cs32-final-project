@@ -99,7 +99,26 @@ def generate_valid_grid():
 
 # --- VALIDATE PLAYER GUESS ---
 def is_valid_guess(game_name, i, j):
-    return game_name.lower() in cell_answers[(i, j)]
+    guess = game_name.strip().lower()
+
+    # 1. quick cache check (optional UX boost)
+    if any(guess in name for name in cell_answers[(i, j)]): # if cache fails, THEN query the API live
+        return True
+
+    # 2. authoritative IGDB check
+    genre_id = rows[i][1]
+    condition = cols[j][1]
+
+    query = f'''
+    fields name;
+    where name ~ "{game_name}"*
+    & genres = ({genre_id})
+    & {condition};
+    limit 1;
+    '''
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+    return len(r.json()) > 0
 
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
