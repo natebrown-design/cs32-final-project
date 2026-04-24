@@ -2,7 +2,7 @@ import requests_cache
 import requests
 
 # Enable cache (stored in SQLite file)
-requests_cache.install_cache('igdb_cache', expire_after=86400)
+requests_cache.install_cache('igdb_cache', expire_after=86400) # if query has been asked before, 
 
 url = "https://api.igdb.com/v4/games"
 headers = {
