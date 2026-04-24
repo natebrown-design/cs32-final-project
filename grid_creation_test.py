@@ -33,6 +33,7 @@ COLUMNS = {
     "Classic (before 2010)": "first_release_date < 1262304000"
 }
 
+# --- CHECK IF COMBO HAS ANY GAME ---
 def has_games(genre_id, condition):
     query = f"""
     fields name;
@@ -40,27 +41,25 @@ def has_games(genre_id, condition):
     limit 1;
     """
 
-    response = requests.post(URL, headers=HEADERS, data=query)
-
-    if response.status_code != 200:
+    r = requests.post(URL, headers=HEADERS, data=query)
+    if r.status_code != 200:
         return False
+    return len(r.json()) > 0
 
-    data = response.json()
-    return len(data) > 0
 
-def generate_valid_grid(max_attempts=50):
-    genre_items = list(GENRES.items()) # makes a list of all the keys in the genres dictionary
+# --- GENERATE VALID GRID ---
+def generate_valid_grid():
+    genre_items = list(GENRES.items())
     column_items = list(COLUMNS.items())
 
-    for attempt in range(max_attempts):
+    while True:
         rows = random.sample(genre_items, 3)
         cols = random.sample(column_items, 3)
 
         valid = True
-
-        for r_name, r_id in rows:
-            for c_name, c_cond in cols:
-                if not has_games(r_id, c_cond):
+        for _, g_id in rows:
+            for _, cond in cols:
+                if not has_games(g_id, cond):
                     valid = False
                     break
             if not valid:
@@ -69,23 +68,72 @@ def generate_valid_grid(max_attempts=50):
         if valid:
             return rows, cols
 
-        time.sleep(0.2)  # avoid rate limits
+        time.sleep(0.2)
 
-    return None, None
 
-def main():
-    rows, cols = generate_valid_grid()
+# --- VALIDATE PLAYER GUESS ---
+def is_valid_guess(game_name, genre_id, condition):
+    query = f"""
+    fields name;
+    where name ~ "{game_name}"*
+    & genres = ({genre_id})
+    & {condition};
+    limit 1;
+    """
 
-    if rows:
-        print("ROWS (Genres):")
-        for r in rows:
-            print("-", r[0])
+    r = requests.post(URL, headers=HEADERS, data=query)
+    if r.status_code != 200:
+        return False
 
-        print("\nCOLUMNS (Constraints):")
-        for c in cols:
-            print("-", c[0])
-    else:
-        print("Failed to generate a valid grid.")
+    return len(r.json()) > 0
 
-if __name__ == '__main__':
-    main()
+
+# --- INIT GAME ---
+rows, cols = generate_valid_grid()
+
+row_tags = [r[0] for r in rows]
+col_tags = [c[0] for c in cols]
+
+# Track board state
+board = [[None for _ in range(3)] for _ in range(3)]
+
+
+# --- DISPLAY BOARD ---
+def print_board():
+    print("\nCurrent Board:")
+    print(" " * 20 + " | ".join(col_tags))
+    print("-" * 60)
+    for i in range(3):
+        row_display = []
+        for j in range(3):
+            cell = board[i][j] if board[i][j] else "EMPTY"
+            row_display.append(cell[:15])
+        print(f"{row_tags[i]:<18} | " + " | ".join(row_display))
+    print()
+
+
+# --- GAME LOOP ---
+def play_game():
+    print("Welcome to Video Game-doku!")
+    print("Enter a game that matches BOTH the row and column tags.\n")
+
+    for i in range(3):
+        for j in range(3):
+            print_board()
+            print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
+
+            guess = input("Your guess: ").strip()
+
+            if is_valid_guess(guess, rows[i][1], cols[j][1]):
+                board[i][j] = guess
+                print("✅ Correct!\n")
+            else:
+                print("❌ Incorrect or invalid game.\n")
+
+    print_board()
+    print("Game over!")
+
+
+# --- RUN ---
+if __name__ == "__main__":
+    play_game()
