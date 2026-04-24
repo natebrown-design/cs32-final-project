@@ -1,6 +1,7 @@
 import requests
 import random
 import time
+import requests_cache
 
 CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
 ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
