@@ -70,5 +70,19 @@ def generate_valid_grid(max_attempts=50):
 
     return None, None
 
-def main()
-    
+def main():
+    rows, cols = generate_valid_grid()
+
+    if rows:
+        print("ROWS (Genres):")
+        for r in rows:
+            print("-", r[0])
+
+        print("\nCOLUMNS (Constraints):")
+        for c in cols:
+            print("-", c[0])
+    else:
+        print("Failed to generate a valid grid.")
+
+if __name__ == '__main__':
+    main()
