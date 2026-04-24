@@ -15,5 +15,4 @@ query = "fields name, rating; limit 10;"
 response = requests.post(url, headers=headers, data=query)
 
 data = response.json()
-print(data)
-print(response.from_cache)
+
