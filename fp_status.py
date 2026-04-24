@@ -46,7 +46,7 @@ def has_games(genre_id, condition):
         return False
     return len(r.json()) > 0
 
-# --- PRECACHe SET OF VALID GAMES SO API ISN'T CALLED LIVE DURING GAMEPLAY ---
+# --- PRECACHE SET OF VALID GAMES SO API ISN'T CALLED LIVE DURING GAMEPLAY ---
 def precache_cells(rows, cols):
     cell_answers = {}
 
