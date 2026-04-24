@@ -10,7 +10,7 @@ This project is inspired by PokeDoku, a daily guessing game where the goal is to
 
 AS OF FP STATUS:
 
-This project currently randomizes the column and row tags in the game, ensuring that there is at least one game in the database that matches both of those tags. My script then pre-caches up to 500 possible games that fit in each of the 9 slots; if a player inputs a game that was not in the list of 500, then the script will manually query the IGDB API to check if that game is in the database and matches the tags associated with it.
+This project currently randomizes the column and row tags in the game, ensuring that there is at least one game in the database that matches both of those tags. My script then pre-caches up to 500 possible games that fit in each of the 9 slots; if a player inputs a game that was not in the list of 500, then the script will manually query the IGDB API to check if that game is in the database and matches the tags associated with it. TO BE ADDED: memory, scoring system, ensuring that duplicates cannot be input, more user-friendly typing (possible drop-down menu of selections).
 
 Generative AI Tools:
 ChatGPT was used to generate the board display (lines 136-146), as well as assist in understanding caching. ChatGPT also recommended the inclusion of a combination of pre-caching and live API queries mid gameplay, as initially including only pre-caching missed many popular games that fit in both the column and row tags when testing.
