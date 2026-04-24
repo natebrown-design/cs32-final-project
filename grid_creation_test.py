@@ -124,7 +124,7 @@ def play_game():
 
             guess = input("Your guess: ").strip()
 
-            if is_valid_guess(guess, rows[i][1], cols[j][1]):
+            if is_valid_guess(guess, i, j):
                 board[i][j] = guess
                 print("✅ Correct!\n")
             else:
