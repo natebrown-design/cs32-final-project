@@ -49,7 +49,7 @@ def has_games(genre_id, condition):
     return len(data) > 0
 
 def generate_valid_grid(max_attempts=50):
-    genre_items = list(GENRES.items())
+    genre_items = list(GENRES.items()) # makes a list of all the keys in the genres dictionary
     column_items = list(COLUMNS.items())
 
     for attempt in range(max_attempts):
