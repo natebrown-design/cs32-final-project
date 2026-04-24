@@ -131,7 +131,8 @@ def print_board():
 def play_game():
     print("Welcome to Video Game-doku!")
     print("Enter a game that matches BOTH the row and column tags.\n")
-
+    for key, val in cell_answers.items():
+        print(key, len(val))
     for i in range(3):
         for j in range(3):
             print_board()
