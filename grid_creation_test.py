@@ -13,6 +13,8 @@ HEADERS = {
     "Authorization": f"Bearer {ACCESS_TOKEN}"
 }
 
+requests_cache.install_cache('igdb_cache', expire_after=86400, allowable_methods=('GET', 'POST')) # allows for caching a post request
+
 # Example genre IDs (IGDB genre IDs)
 GENRES = {
     "Adventure": 31,
