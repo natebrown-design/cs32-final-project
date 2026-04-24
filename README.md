@@ -9,4 +9,7 @@ This project is inspired by PokeDoku, a daily guessing game where the goal is to
 
 AS OF FP STATUS:
 
-This project
+This project currently randomizes the column and row tags in the game, ensuring that there is at least one game in the database that matches both of those tags. My script then pre-caches up to 500 possible games that fit in each of the 9 slots; if a player inputs a game that was not in the list of 500, then the script will manually query the IGDB API to check if that game is in the database and matches the tags associated with it.
+
+Generative AI Tools:
+
