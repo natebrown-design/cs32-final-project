@@ -46,6 +46,32 @@ def has_games(genre_id, condition):
         return False
     return len(r.json()) > 0
 
+# --- PRECACHe SET OF VALID GAMES SO API ISN'T CALLED LIVE DURING GAMEPLAY ---
+def precache_cells(rows, cols):
+    cell_answers = {}
+
+    for i, (_, genre_id) in enumerate(rows):
+        for j, (_, condition) in enumerate(cols):
+
+            query = f"""
+            fields name;
+            where genres = ({genre_id}) & {condition};
+            limit 200;
+            """
+
+            r = requests.post(URL, headers=HEADERS, data=query)
+
+            if r.status_code != 200:
+                cell_answers[(i, j)] = set()
+                continue
+
+            data = r.json()
+
+            # Store lowercase names for easier matching
+            names = {game["name"].lower() for game in data}
+            cell_answers[(i, j)] = names
+
+    return cell_answers
 
 # --- GENERATE VALID GRID ---
 def generate_valid_grid():
@@ -72,24 +98,13 @@ def generate_valid_grid():
 
 
 # --- VALIDATE PLAYER GUESS ---
-def is_valid_guess(game_name, genre_id, condition):
-    query = f"""
-    fields name;
-    where name ~ "{game_name}"*
-    & genres = ({genre_id})
-    & {condition};
-    limit 1;
-    """
-
-    r = requests.post(URL, headers=HEADERS, data=query)
-    if r.status_code != 200:
-        return False
-
-    return len(r.json()) > 0
-
+def is_valid_guess(game_name, i, j):
+    return game_name.lower() in cell_answers[(i, j)]
 
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
+
+cell_answers = precache_cells(rows, cols)
 
 row_tags = [r[0] for r in rows]
 col_tags = [c[0] for c in cols]
