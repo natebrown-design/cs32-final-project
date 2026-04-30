@@ -118,7 +118,12 @@ def is_valid_guess(game_name, i, j):
     '''
 
     r = requests.post(URL, headers=HEADERS, data=query)
-    return len(r.json()) > 0
+    data = r.json()
+
+    if not data:
+        return False
+
+    return any(game["name"].lower() == guess for game in data) # enforce exact match
 
 # --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
 def is_game_in_database(game_name):
