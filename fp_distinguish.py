@@ -36,7 +36,8 @@ COLUMNS = {
     "Classic (before 2010)": "first_release_date < 1262304000",
     "Roguelike": 'keywords = (113)',
     "Indie": 'genres = (32)',
-    "Music": 'genres = (7)'
+    "Music": 'genres = (7)',
+    "Multiplayer": 'game_modes != null & game_modes = (2)'
 }
 
 # --- CHECK IF COMBO HAS ANY GAME ---
