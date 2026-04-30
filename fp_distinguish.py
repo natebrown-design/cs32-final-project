@@ -137,7 +137,10 @@ def is_game_in_database(game_name):
     r = requests.post(URL, headers=HEADERS, data=query)
     return len(r.json()) > 0
 
-# --- QUERIES THE PLAYER
+# --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
+
+
+
 
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
