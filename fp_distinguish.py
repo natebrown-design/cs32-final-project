@@ -194,7 +194,7 @@ def play_game():
                 print_board()
                 print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
-                guess = input("Your guess: ").strip()
+                guess = input("Your guess: ")
 
                 if is_valid_guess(guess, i, j):
                     board[i][j] = guess
