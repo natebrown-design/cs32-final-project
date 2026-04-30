@@ -175,8 +175,10 @@ def play_game():
                 board[i][j] = guess
                 print("✅ Correct!\n")
             else:
-                is_game_in_database(guess)
-                print("❌ Incorrect or invalid game.\n")
+                if is_game_in_database(guess):
+                    print("❌ Game is in database, but does not match tags. Incorrect!\n")
+                else:
+                    
 
     print_board()
     print("Game over!")
