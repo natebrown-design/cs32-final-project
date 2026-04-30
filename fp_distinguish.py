@@ -33,14 +33,11 @@ COLUMNS = {
     "Highly Rated (>85)": "rating > 85",
     "Recent (after 2020)": "first_release_date > 1577836800",
     "Popular (>100 ratings)": "rating_count > 100",
-    "Classic (before 2010)": "first_release_date < 1262304000"
-}
-
-COLUMNS.update({
+    "Classic (before 2010)": "first_release_date < 1262304000",
     "Roguelike": 'keywords = (113)',
     "Indie": 'genres = (32)',
     "Music": 'genres = (7)'
-})
+}
 
 # --- CHECK IF COMBO HAS ANY GAME ---
 def has_games(genre_id, condition):
