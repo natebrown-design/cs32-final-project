@@ -137,6 +137,8 @@ def is_game_in_database(game_name):
     r = requests.post(URL, headers=HEADERS, data=query)
     return len(r.json()) > 0
 
+# --- QUERIES THE PLAYER
+
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
 
