@@ -162,6 +162,8 @@ col_tags = [c[0] for c in cols]
 # Track board state
 board = [[None for _ in range(3)] for _ in range(3)]
 
+# track score
+score = 0
 
 # --- DISPLAY BOARD ---
 def print_board():
