@@ -163,6 +163,7 @@ board = [[None for _ in range(3)] for _ in range(3)]
 
 # track score
 score = 0
+used_games = set()
 
 # --- DISPLAY BOARD ---
 def print_board():
