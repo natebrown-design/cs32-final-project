@@ -125,7 +125,7 @@ def is_game_in_database(game_name):
 
     query = f'''
     fields name;
-    where name ~ "{game_name}"*
+    where name ~ "{game_name}";
     limit 1;
     '''
 
@@ -181,7 +181,7 @@ def play_game():
                 elif is_game_in_database(guess):
                     print("❌ Game is in database, but does not match tags. Incorrect!\n")
                     break
-                
+
                 else:
                     print("Game is not in database. Please enter a valid game.")
 
