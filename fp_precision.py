@@ -215,7 +215,7 @@ def get_game_name():
                 devs.append(company.get("name", ""))
         developers = ", ".join(devs) if devs else "Unknown"
 
-        print(f"{idx}: {name} | {release_year} | {genres} | {developers}")
+        print(f"{idx}: {name} | Release Date: {release_year} | Genre(s): {genres} | Developer: {developers}")
 
     try:
         choice = int(input("\nSelect number: "))
