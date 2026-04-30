@@ -129,6 +129,8 @@ def is_game_in_database(game_name):
     limit 1;
     '''
     
+    r = requests.post(URL, headers=HEADERS, data=query)
+
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
 
