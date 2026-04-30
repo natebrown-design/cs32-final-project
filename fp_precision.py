@@ -138,7 +138,7 @@ def is_game_in_database(game_name):
     return len(r.json()) > 0
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
-#def get_game_name()
+def get_game_name()
 
 
 
