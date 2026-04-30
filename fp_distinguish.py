@@ -167,6 +167,7 @@ score = 0
 
 # --- DISPLAY BOARD ---
 def print_board():
+    print(f"\nCurrent PTS: {score}/9")
     print("\nCurrent Board:")
     print(" " * 20 + " | ".join(col_tags))
     print("-" * 60)
@@ -181,6 +182,7 @@ def print_board():
 
 # --- GAME LOOP ---
 def play_game():
+    global score
     print("Welcome to Video Game-doku!")
     print("Enter a game that matches BOTH the row and column tags.\n")
     #for key, val in cell_answers.items():
@@ -196,10 +198,12 @@ def play_game():
 
                 if is_valid_guess(guess, i, j):
                     board[i][j] = guess
+                    score += 1 # modifying a global variable in function, so must declare it at start of play_game
                     print("✅ Correct!\n")
                     break
 
                 elif is_game_in_database(guess):
+                    board[i][j] = '❌'
                     print("❌ Game does not match tags. Incorrect!\n")
                     break
 
@@ -207,7 +211,7 @@ def play_game():
                     print("❗ Game is not in database. Try again! Please enter a valid game.")
 
     print_board()
-    print("Game over!")
+    print(f"Game over! Final Score: {score}/9")
 
 
 # --- RUN ---
