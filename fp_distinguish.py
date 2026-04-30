@@ -121,8 +121,14 @@ def is_valid_guess(game_name, i, j):
     return len(r.json()) > 0
 
 # --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
+def is_game_in_database(game_name):
 
-
+    query = f'''
+    fields name;
+    where name ~ "{game_name}"*
+    limit 1;
+    '''
+    
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
 
@@ -166,6 +172,7 @@ def play_game():
                 board[i][j] = guess
                 print("✅ Correct!\n")
             else:
+                is_game_in_database(guess)
                 print("❌ Incorrect or invalid game.\n")
 
     print_board()
