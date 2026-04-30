@@ -102,7 +102,7 @@ def is_valid_guess(game_name, i, j):
     guess = game_name.strip().lower()
 
     # 1. quick cache check (optional UX boost)
-    if any(guess == name for name in cell_answers[(i, j)]): # if cache fails, THEN query the API live
+    if guess in cell_answers[(i, j)]:
         return True
 
     # 2. authoritative IGDB check
