@@ -162,8 +162,8 @@ def print_board():
 def play_game():
     print("Welcome to Video Game-doku!")
     print("Enter a game that matches BOTH the row and column tags.\n")
-    for key, val in cell_answers.items():
-        print(key, len(val))
+    #for key, val in cell_answers.items():
+        #print(key, len(val))
     for i in range(3):
         for j in range(3):
 
@@ -179,11 +179,11 @@ def play_game():
                     break
 
                 elif is_game_in_database(guess):
-                    print("❌ Game is in database, but does not match tags. Incorrect!\n")
+                    print("❌ Game does not match tags. Incorrect!\n")
                     break
 
                 else:
-                    print("Game is not in database. Please enter a valid game.")
+                    print("❗ Game is not in database. Try again! Please enter a valid game.")
 
     print_board()
     print("Game over!")
