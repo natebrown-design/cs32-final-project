@@ -38,7 +38,6 @@ COLUMNS = {
 
 COLUMNS.update({
     "Roguelike": 'keywords = (113)',
-    "Sandbox": 'keywords = (114)',
     "Rhythm": 'keywords = (215)',
 })
 
