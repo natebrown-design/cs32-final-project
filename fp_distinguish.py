@@ -22,7 +22,10 @@ GENRES = {
     "Puzzle": 9,
     "RPG": 12,
     "Strategy": 15,
-    "Platformer": 8
+    "Platformer": 8,
+    "Fighting": 4,
+    "Survival": 33,
+    "Horror": 32
 }
 
 # Column constraints (IGDB query snippets)
