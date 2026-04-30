@@ -38,7 +38,8 @@ COLUMNS = {
 
 COLUMNS.update({
     "Roguelike": 'keywords = (113)',
-    "Rhythm": 'keywords = (215)',
+    "Indie": 'genres = (32)',
+    "Music": 'genres = (7)'
 })
 
 # --- CHECK IF COMBO HAS ANY GAME ---
