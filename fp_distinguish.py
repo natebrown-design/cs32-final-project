@@ -120,7 +120,7 @@ def is_valid_guess(game_name, i, j):
     r = requests.post(URL, headers=HEADERS, data=query)
     return len(r.json()) > 0
 
-# --- VALIDATE PLAYER GUESS ---
+# --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
 
 
 # --- INIT GAME ---
