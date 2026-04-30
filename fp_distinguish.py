@@ -128,8 +128,9 @@ def is_game_in_database(game_name):
     where name ~ "{game_name}"*
     limit 1;
     '''
-    
+
     r = requests.post(URL, headers=HEADERS, data=query)
+    return len(r.json()) > 0
 
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
