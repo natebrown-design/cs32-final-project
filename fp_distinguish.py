@@ -119,7 +119,7 @@ def is_valid_guess(game_name, i, j):
 
     query = f'''
     fields name;
-    where name ~ "{guess.upper()}"
+    where name ~ "{guess}"
     & genres = ({genre_id})
     & {condition};
     limit 1;
@@ -135,15 +135,18 @@ def is_valid_guess(game_name, i, j):
 
 # --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
 def is_game_in_database(game_name):
+    guess = game_name.strip().lower()
 
     query = f'''
     fields name;
-    where name = "{game_name}";
+    where name = "{guess}";
     limit 1;
     '''
 
     r = requests.post(URL, headers=HEADERS, data=query)
-    return len(r.json()) > 0
+    data = r.json()
+
+    return any(game["name"].lower() == guess for game in data)
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
 #def get_game_name()
