@@ -119,7 +119,7 @@ def is_valid_guess(game_name, i, j):
 
     query = f'''
     fields name;
-    where name ~ "{game_name}"
+    where name ~ "{guess.upper()}"
     & genres = ({genre_id})
     & {condition};
     limit 1;
