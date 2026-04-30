@@ -195,15 +195,15 @@ def play_game():
                 print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
                 guess = input("Your guess: ")
-                guess = guess.lower()
+                guess_lower = guess.lower()
 
                 # prevents duplicate games from being used
-                if guess in used_games:
+                if guess_lower in used_games:
                     print("❗ You've already used that game! Try a different one.\n")
 
                 if is_valid_guess(guess, i, j):
                     board[i][j] = guess
-                    used_games.add(guess)
+                    used_games.add(guess_lower)
                     score += 1 # modifying a global variable in function, so must declare it at start of play_game
                     print("✅ Correct!\n")
                     break
