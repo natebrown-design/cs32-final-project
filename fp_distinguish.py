@@ -166,17 +166,22 @@ def play_game():
         print(key, len(val))
     for i in range(3):
         for j in range(3):
-            print_board()
-            print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
-            guess = input("Your guess: ").strip()
+            while True:
+                print_board()
+                print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
-            if is_valid_guess(guess, i, j):
-                board[i][j] = guess
-                print("✅ Correct!\n")
-            else:
-                if is_game_in_database(guess):
+                guess = input("Your guess: ").strip()
+
+                if is_valid_guess(guess, i, j):
+                    board[i][j] = guess
+                    print("✅ Correct!\n")
+                    break
+
+                elif is_game_in_database(guess):
                     print("❌ Game is in database, but does not match tags. Incorrect!\n")
+                    break
+                
                 else:
                     print("Game is not in database. Please enter a valid game.")
 
