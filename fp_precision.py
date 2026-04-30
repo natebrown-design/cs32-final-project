@@ -138,9 +138,94 @@ def is_game_in_database(game_name):
     return len(r.json()) > 0
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
-def get_game_name()
+def get_game_name():
+    """
+    Prompts the user for a game name and resolves ambiguity.
+    Checks precache first, then falls back to IGDB API.
+    Returns the selected game's exact name (string).
+    """
 
+    query_input = input("Game name: ").strip().lower()
 
+    # --- 1. SEARCH PRECACHE ---
+    all_cached_games = set().union(*cell_answers.values())
+
+    # simple substring match
+    matches = [name for name in all_cached_games if query_input in name]
+
+    if matches:
+        matches = sorted(matches)[:10]  # limit list size
+
+        if len(matches) == 1:
+            return matches[0]
+
+        print(f"\nWhich game did you mean?\n")
+        for i, name in enumerate(matches):
+            print(f"{i}: {name}")
+
+        try:
+            choice = int(input("\nSelect number: "))
+            if 0 <= choice < len(matches):
+                return matches[choice]
+        except ValueError:
+            pass
+
+        print("Invalid selection.")
+        return None
+
+    # --- 2. FALLBACK TO API ---
+    query = f'''
+    fields name, first_release_date, genres.name, involved_companies.company.name;
+    where name ~ "{query_input}";
+    limit 5;
+    '''
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+
+    if r.status_code != 200:
+        print("Error contacting game database.")
+        return None
+
+    results = r.json()
+
+    if not results:
+        print("No matching games found.")
+        return None
+
+    if len(results) == 1:
+        return results[0]["name"]
+
+    print(f"\nWhich '{query_input}'?\n")
+
+    for idx, game in enumerate(results):
+        name = game.get("name", "Unknown")
+
+        timestamp = game.get("first_release_date")
+        if timestamp:
+            release_year = time.strftime("%Y", time.localtime(timestamp))
+        else:
+            release_year = "Unknown"
+
+        genres = ", ".join(g["name"] for g in game.get("genres", [])) if game.get("genres") else "Unknown"
+
+        devs = []
+        for comp in game.get("involved_companies", []):
+            company = comp.get("company", {})
+            if company:
+                devs.append(company.get("name", ""))
+        developers = ", ".join(devs) if devs else "Unknown"
+
+        print(f"{idx}: {name} | {release_year} | {genres} | {developers}")
+
+    try:
+        choice = int(input("\nSelect number: "))
+        if 0 <= choice < len(results):
+            return results[choice]["name"]
+    except ValueError:
+        pass
+
+    print("Invalid selection.")
+    return None
 
 # --- INIT GAME ---
 rows, cols = generate_valid_grid()
@@ -181,8 +266,7 @@ def play_game():
                 print_board()
                 print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
-                guess = input("Your guess: ").strip()
-                guess = get
+                guess = get_game_name()
 
                 if is_valid_guess(guess, i, j):
                     board[i][j] = guess
