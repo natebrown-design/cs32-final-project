@@ -36,6 +36,12 @@ COLUMNS = {
     "Classic (before 2010)": "first_release_date < 1262304000"
 }
 
+COLUMNS.update({
+    "Roguelike": 'keywords = (113)',
+    "Sandbox": 'keywords = (114)',
+    "Rhythm": 'keywords = (215)',
+})
+
 # --- CHECK IF COMBO HAS ANY GAME ---
 def has_games(genre_id, condition):
     query = f"""
