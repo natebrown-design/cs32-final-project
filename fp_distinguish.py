@@ -130,7 +130,7 @@ def is_game_in_database(game_name):
 
     query = f'''
     fields name;
-    where name ~ "{game_name}";
+    where name = "{game_name}";
     limit 1;
     '''
 
