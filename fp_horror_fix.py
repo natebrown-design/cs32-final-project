@@ -180,7 +180,7 @@ def is_game_in_database(game_name):
 def format_date(timestamp): # helper function for displaying release date
     if not timestamp:
         return "Unknown"
-    return datetime.fromtimestamp(timestamp, datetime.UTC).strftime("%Y")
+    return datetime.fromtimestamp(timestamp, UTC).strftime("%Y")
 
 def disambiguate_game_name(game_name):
     guess = game_name.strip().lower()
