@@ -163,7 +163,7 @@ def disambiguate_game_name(game_name):
         all_cached_games.update(names)
 
     # Get close matches from cached names
-    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7)
+    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7) # cutoff determines how exact of a match we require
 
     if local_matches:
         print("\nDid you mean one of these? (from cached games)\n")
