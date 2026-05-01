@@ -172,10 +172,12 @@ def disambiguate_game_name(game_name):
 
     if local_matches:
         print("\nDid you mean one of these? (from cached games)\n")
+        print(f"0. Use exactly \"{game_name}\"")
+
         for idx, name in enumerate(local_matches):
             print(f"{idx + 1}. {name.title()}")
 
-        print("0. None of these")
+        print(f"{len(local_matches) + 1}. Search more (API)")
 
         while True:
             choice = input("\nEnter the number of the correct game: ").strip()
@@ -187,10 +189,13 @@ def disambiguate_game_name(game_name):
             choice = int(choice)
 
             if choice == 0:
-                break
+                return guess # use exactly what is typed
 
             if 1 <= choice <= len(local_matches):
                 return local_matches[choice - 1]
+
+            elif choice == len(local_matches) + 1:
+                break  # fall through to API search
 
             print("Invalid selection.")
 
