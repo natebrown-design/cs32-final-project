@@ -52,6 +52,8 @@ def build_genre_filter(genre_name, genre_id):
     # Special case for Horror
     if genre_name == "Horror":
         return f"(genres = ({genre_id}) | themes = (19))"
+    if genre_name == "Survival":
+        return f"(genres = ({genre_id}) | themes = (21))"
 
     return f"genres = ({genre_id})"
 
