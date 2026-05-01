@@ -302,7 +302,7 @@ def play_game():
                     print("❗ You've already used that game! Try a different one.\n")
 
                 elif is_valid_guess(guess, i, j):
-                    board[i][j] = guess
+                    board[i][j] = guess.title()
                     used_games.add(guess)
                     score += 1 # modifying a global variable in function, so must declare it at start of play_game
                     print("✅ Correct!\n")
