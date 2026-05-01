@@ -152,9 +152,53 @@ def is_game_in_database(game_name):
     return any(guess == game["name"].lower() for game in data)
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
-def get_game_name():
-    
+def disambiguate_game_name(game_name):
+    query = f'''
+    search "{game_name}";
+    fields name, first_release_date, genres.name;
+    limit 10;
+    '''
 
+    r = requests.post(URL, headers=HEADERS, data=query)
+
+    if r.status_code != 200:
+        return None
+
+    results = r.json()
+
+    if not results:
+        return None
+
+    print("\nDid you mean one of these?\n")
+
+    for idx, game in enumerate(results):
+        name = game.get("name", "Unknown")
+        year = format_date(game.get("first_release_date"))
+
+        genres = "Unknown"
+        if "genres" in game:
+            genres = ", ".join(g["name"] for g in game["genres"])
+
+        print(f"{idx + 1}. {name} ({year}) — {genres}")
+
+    print("0. None of these")
+
+    while True:
+        choice = input("\nEnter the number of the correct game: ").strip()
+
+        if not choice.isdigit():
+            print("Please enter a valid number.")
+            continue
+
+        choice = int(choice)
+
+        if choice == 0:
+            return None
+
+        if 1 <= choice <= len(results):
+            return results[choice - 1]["name"]
+
+        print("Invalid selection.")
 
 
 # --- INIT GAME ---
