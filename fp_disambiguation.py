@@ -2,6 +2,7 @@ import requests
 import random
 import time
 import requests_cache
+import difflib
 
 CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
 ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
@@ -152,7 +153,43 @@ def is_game_in_database(game_name):
     return any(guess == game["name"].lower() for game in data)
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
+
 def disambiguate_game_name(game_name):
+    guess = game_name.strip().lower()
+
+    # --- 1. SEARCH PRECACHE FIRST ---
+    all_cached_games = set()
+    for names in cell_answers.values():
+        all_cached_games.update(names)
+
+    # Get close matches from cached names
+    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7)
+
+    if local_matches:
+        print("\nDid you mean one of these? (from cached games)\n")
+        for idx, name in enumerate(local_matches):
+            print(f"{idx + 1}. {name.title()}")
+
+        print("0. None of these")
+
+        while True:
+            choice = input("\nEnter the number of the correct game: ").strip()
+
+            if not choice.isdigit():
+                print("Please enter a valid number.")
+                continue
+
+            choice = int(choice)
+
+            if choice == 0:
+                break
+
+            if 1 <= choice <= len(local_matches):
+                return local_matches[choice - 1]
+
+            print("Invalid selection.")
+
+    # --- 2. FALLBACK TO API SEARCH ---
     query = f'''
     search "{game_name}";
     fields name, first_release_date, genres.name;
@@ -173,7 +210,10 @@ def disambiguate_game_name(game_name):
 
     for idx, game in enumerate(results):
         name = game.get("name", "Unknown")
-        year = format_date(game.get("first_release_date"))
+
+        year = "Unknown"
+        if game.get("first_release_date"):
+            year = format_date(game["first_release_date"])
 
         genres = "Unknown"
         if "genres" in game:
@@ -196,7 +236,7 @@ def disambiguate_game_name(game_name):
             return None
 
         if 1 <= choice <= len(results):
-            return results[choice - 1]["name"]
+            return results[choice - 1]["name"].lower()
 
         print("Invalid selection.")
 
