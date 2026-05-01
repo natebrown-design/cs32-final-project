@@ -209,12 +209,12 @@ def disambiguate_game_name(game_name):
     r = requests.post(URL, headers=HEADERS, data=query)
 
     if r.status_code != 200:
-        return None
+        return guess
 
     results = r.json()
 
     if not results:
-        return None
+        return guess
 
     print("\nDid you mean one of these?\n")
 
