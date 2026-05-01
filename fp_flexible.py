@@ -244,6 +244,8 @@ def disambiguate_game_name(game_name):
 
         if 1 <= choice <= len(results):
             return results[choice - 1]["name"].lower()
+        elif choice == len(local_matches) + 1:
+            return None
 
         print("Invalid selection.")
 
