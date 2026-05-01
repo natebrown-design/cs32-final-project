@@ -43,7 +43,8 @@ COLUMNS = {
     "Music": 'genres = (7)',
     "Multiplayer": 'game_modes != null & game_modes = (2)'
 }
-# ran into trouble with inconsistent tagging of games in the database
+# ran into trouble with inconsistent tagging of games in the database (horror being under both genre and theme,
+# many horror games not counting since they are listed under the "horror" theme instead)
 
 # --- CHECK IF COMBO HAS ANY GAME ---
 def has_games(genre_id, condition):
