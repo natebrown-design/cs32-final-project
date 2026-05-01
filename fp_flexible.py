@@ -228,7 +228,7 @@ def disambiguate_game_name(game_name):
 
         print(f"{idx + 1}. {name} ({year})")
 
-    print("0. None of these")
+    print(f"{len(local_matches) + 1}. Re-enter guess")
 
     while True:
         choice = input("\nEnter the number of the correct game: ").strip()
