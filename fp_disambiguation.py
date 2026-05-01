@@ -3,6 +3,7 @@ import random
 import time
 import requests_cache
 import difflib
+from datetime import datetime
 
 CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
 ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
@@ -153,6 +154,10 @@ def is_game_in_database(game_name):
     return any(guess == game["name"].lower() for game in data)
 
 # --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
+def format_date(timestamp): # helper function for displaying release date
+    if not timestamp:
+        return "Unknown"
+    return datetime.utcfromtimestamp(timestamp).strftime("%Y")
 
 def disambiguate_game_name(game_name):
     guess = game_name.strip().lower()
