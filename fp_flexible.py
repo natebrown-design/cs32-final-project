@@ -1,0 +1,325 @@
+import requests
+import random
+import time
+import requests_cache
+import difflib
+from datetime import datetime
+
+CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
+ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
+
+URL = "https://api.igdb.com/v4/games"
+
+HEADERS = {
+    "Client-ID": CLIENT_ID,
+    "Authorization": f"Bearer {ACCESS_TOKEN}"
+}
+
+requests_cache.install_cache('igdb_cache', expire_after=86400, allowable_methods=('GET', 'POST')) # allows for caching a post request
+
+# Example genre IDs (IGDB genre IDs)
+GENRES = {
+    "Adventure": 31,
+    "Shooter": 5,
+    "Puzzle": 9,
+    "RPG": 12,
+    "Strategy": 15,
+    "Platformer": 8,
+    "Fighting": 4,
+    "Survival": 33,
+    "Horror": 32
+}
+
+# Column constraints (IGDB query snippets)
+COLUMNS = {
+    "Highly Rated (>85)": "rating > 85",
+    "Recent (after 2020)": "first_release_date > 1577836800",
+    "Popular (>100 ratings)": "rating_count > 100",
+    "Classic (before 2010)": "first_release_date < 1262304000",
+    "Roguelike": 'keywords = (113)',
+    "Indie": 'genres = (32)',
+    "Music": 'genres = (7)',
+    "Multiplayer": 'game_modes != null & game_modes = (2)'
+}
+
+# --- CHECK IF COMBO HAS ANY GAME ---
+def has_games(genre_id, condition):
+    query = f"""
+    fields name;
+    where genres = ({genre_id}) & {condition};
+    limit 1;
+    """
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+    if r.status_code != 200:
+        return False
+    return len(r.json()) > 0
+
+# --- PRECACHE SET OF VALID GAMES SO API ISN'T CALLED LIVE DURING GAMEPLAY ---
+def precache_cells(rows, cols):
+    cell_answers = {}
+
+    for i, (_, genre_id) in enumerate(rows):
+        for j, (_, condition) in enumerate(cols):
+
+            query = f"""
+            fields name;
+            where genres = ({genre_id}) & {condition};
+            limit 500;
+            """
+
+            r = requests.post(URL, headers=HEADERS, data=query)
+
+            if r.status_code != 200:
+                cell_answers[(i, j)] = set()
+                continue
+
+            data = r.json()
+
+            # Store lowercase names for easier matching
+            names = {game["name"].lower() for game in data}
+            cell_answers[(i, j)] = names
+
+    return cell_answers
+
+# --- GENERATE VALID GRID ---
+def generate_valid_grid():
+    genre_items = list(GENRES.items())
+    column_items = list(COLUMNS.items())
+
+    while True:
+        rows = random.sample(genre_items, 3)
+        cols = random.sample(column_items, 3)
+
+        valid = True
+        for _, g_id in rows:
+            for _, cond in cols:
+                if not has_games(g_id, cond):
+                    valid = False
+                    break
+            if not valid:
+                break
+
+        if valid:
+            return rows, cols
+
+        time.sleep(0.2)
+
+
+# --- VALIDATE PLAYER GUESS ---
+def is_valid_guess(game_name, i, j):
+    guess = game_name.strip().lower()
+
+    # 1. quick cache check (optional UX boost)
+    if guess in cell_answers[(i, j)]:
+        return True
+
+    # 2. authoritative IGDB check
+    genre_id = rows[i][1]
+    condition = cols[j][1]
+
+    query = f'''
+    search "{game_name}";
+    fields name;
+    where genres = ({genre_id})
+    & {condition};
+    limit 1;
+    '''
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+    data = r.json()
+
+    if not data:
+        return False
+
+    return any(game["name"].lower() == guess for game in data) # enforce exact match
+
+# --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
+def is_game_in_database(game_name):
+    guess = game_name.strip().lower()
+
+    query = f'''
+    search "{game_name}";
+    fields name;
+    limit 10;
+    '''
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+
+    if r.status_code != 200:
+        return False
+
+    data = r.json()
+
+    return any(guess == game["name"].lower() for game in data)
+
+# --- QUERIES THE PLAYER TO WHAT GAME THEY ARE REFERRING TO FOR DISAMBIGUATION (like get_person_id function in pset 5!) ---
+def format_date(timestamp): # helper function for displaying release date
+    if not timestamp:
+        return "Unknown"
+    return datetime.utcfromtimestamp(timestamp).strftime("%Y")
+
+def disambiguate_game_name(game_name):
+    guess = game_name.strip().lower()
+
+    # --- 1. SEARCH PRECACHE FIRST ---
+    all_cached_games = set()
+    for names in cell_answers.values():
+        all_cached_games.update(names)
+
+    # Get close matches from cached names
+    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7) # cutoff determines how exact of a match we require
+
+    if local_matches:
+        print("\nDid you mean one of these? (from cached games)\n")
+        for idx, name in enumerate(local_matches):
+            print(f"{idx + 1}. {name.title()}")
+
+        print("0. None of these")
+
+        while True:
+            choice = input("\nEnter the number of the correct game: ").strip()
+
+            if not choice.isdigit():
+                print("Please enter a valid number.")
+                continue
+
+            choice = int(choice)
+
+            if choice == 0:
+                break
+
+            if 1 <= choice <= len(local_matches):
+                return local_matches[choice - 1]
+
+            print("Invalid selection.")
+
+    # --- 2. FALLBACK TO API SEARCH ---
+    query = f'''
+    search "{game_name}";
+    fields name, first_release_date;
+    limit 10;
+    '''
+
+    r = requests.post(URL, headers=HEADERS, data=query)
+
+    if r.status_code != 200:
+        return None
+
+    results = r.json()
+
+    if not results:
+        return None
+
+    print("\nDid you mean one of these?\n")
+
+    for idx, game in enumerate(results):
+        name = game.get("name", "Unknown")
+
+        year = "Unknown"
+        if game.get("first_release_date"):
+            year = format_date(game["first_release_date"])
+
+        print(f"{idx + 1}. {name} ({year})")
+
+    print("0. None of these")
+
+    while True:
+        choice = input("\nEnter the number of the correct game: ").strip()
+
+        if not choice.isdigit():
+            print("Please enter a valid number.")
+            continue
+
+        choice = int(choice)
+
+        if choice == 0:
+            return None
+
+        if 1 <= choice <= len(results):
+            return results[choice - 1]["name"].lower()
+
+        print("Invalid selection.")
+
+
+# --- INIT GAME ---
+rows, cols = generate_valid_grid()
+
+cell_answers = precache_cells(rows, cols)
+
+row_tags = [r[0] for r in rows]
+col_tags = [c[0] for c in cols]
+
+# Track board state
+board = [[None for _ in range(3)] for _ in range(3)]
+
+# track score
+score = 0
+used_games = set()
+
+# --- DISPLAY BOARD ---
+def print_board():
+    print(f"\nCurrent PTS: {score}/9")
+    print("\nCurrent Board:")
+    print(" " * 20 + " | ".join(col_tags))
+    print("-" * 60)
+    for i in range(3):
+        row_display = []
+        for j in range(3):
+            cell = board[i][j] if board[i][j] else "EMPTY"
+            row_display.append(cell[:15])
+        print(f"{row_tags[i]:<18} | " + " | ".join(row_display))
+    print()
+
+
+# --- GAME LOOP ---
+def play_game():
+    global score
+    print("Welcome to Video Game-doku!")
+    print("Enter a game that matches BOTH the row and column tags.\n")
+    #for key, val in cell_answers.items():
+        #print(key, len(val))
+    for i in range(3):
+        for j in range(3):
+
+            while True:
+                print_board()
+                print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
+
+                guess = input("Your guess: ").strip()
+
+                # Try disambiguation
+                resolved_name = disambiguate_game_name(guess)
+
+                if resolved_name:
+                    guess = resolved_name.lower()
+                else:
+                    print("❗ Could not identify the game. Please try again!")
+                    continue
+
+                # prevents duplicate games from being used
+                if guess in used_games:
+                    print("❗ You've already used that game! Try a different one.\n")
+
+                elif is_valid_guess(guess, i, j):
+                    board[i][j] = guess.title()
+                    used_games.add(guess)
+                    score += 1 # modifying a global variable in function, so must declare it at start of play_game
+                    print("✅ Correct!\n")
+                    break
+
+                elif is_game_in_database(guess):
+                    board[i][j] = '❌'
+                    print("❌ Game does not match tags. Incorrect!\n")
+                    break
+
+                else:
+                    print("❗ Game is not in database. Try again! Please enter a valid game.")
+
+    print_board()
+    print(f"Game over! Final Score: {score}/9")
+
+
+# --- RUN ---
+if __name__ == "__main__":
+    play_game()
