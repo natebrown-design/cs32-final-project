@@ -197,7 +197,7 @@ def disambiguate_game_name(game_name):
     # --- 2. FALLBACK TO API SEARCH ---
     query = f'''
     search "{game_name}";
-    fields name, first_release_date, genres.name;
+    fields name, first_release_date;
     limit 10;
     '''
 
@@ -220,11 +220,7 @@ def disambiguate_game_name(game_name):
         if game.get("first_release_date"):
             year = format_date(game["first_release_date"])
 
-        genres = "Unknown"
-        if "genres" in game:
-            genres = ", ".join(g["name"] for g in game["genres"])
-
-        print(f"{idx + 1}. {name} ({year}) — {genres}")
+        print(f"{idx + 1}. {name} ({year})")
 
     print("0. None of these")
 
