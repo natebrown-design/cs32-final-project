@@ -65,7 +65,7 @@ def precache_cells(rows, cols):
             query = f"""
             fields name;
             where genres = ({genre_id}) & {condition};
-            limit 500;
+            limit 100;
             """
 
             r = requests.post(URL, headers=HEADERS, data=query)
