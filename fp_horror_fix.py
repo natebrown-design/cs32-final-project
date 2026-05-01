@@ -73,12 +73,14 @@ def has_games(genre_name, genre_id, condition):
 def precache_cells(rows, cols):
     cell_answers = {}
 
-    for i, (_, genre_id) in enumerate(rows):
+    for i, (genre_name, genre_id) in enumerate(rows):
         for j, (_, condition) in enumerate(cols):
 
+            genre_filter = build_genre_filter(genre_name, genre_id)
+            
             query = f"""
             fields name;
-            where genres = ({genre_id}) & {condition};
+            where {genre_filter} & {condition};
             limit 100;
             """
 
