@@ -44,13 +44,23 @@ COLUMNS = {
     "Multiplayer": 'game_modes != null & game_modes = (2)'
 }
 # ran into trouble with inconsistent tagging of games in the database (horror being under both genre and theme,
-# many horror games not counting since they are listed under the "horror" theme instead)
+# many horror games not counting since they are listed under the "horror" theme instead); led to helper function below
+
+def build_genre_filter(genre_name, genre_id):
+    # Special case for Horror
+    if genre_name == "Horror":
+        return f"(genres = ({genre_id}) | themes = (19))"
+
+    return f"genres = ({genre_id})"
 
 # --- CHECK IF COMBO HAS ANY GAME ---
-def has_games(genre_id, condition):
+def has_games(genre_name, genre_id, condition):
+
+    genre_filter = build_genre_filter(genre_name, genre_id)
+
     query = f"""
     fields name;
-    where genres = ({genre_id}) & {condition};
+    where {genre_filter} & {condition};
     limit 1;
     """
 
