@@ -108,9 +108,9 @@ def generate_valid_grid():
         cols = random.sample(column_items, 3)
 
         valid = True
-        for _, g_id in rows:
+        for genre_name, g_id in rows:
             for _, cond in cols:
-                if not has_games(g_id, cond):
+                if not has_games(genre_name, g_id, cond):
                     valid = False
                     break
             if not valid:
@@ -131,7 +131,7 @@ def is_valid_guess(game_name, i, j):
         return True
 
     # 2. authoritative IGDB check
-    genre_id = rows[i][1]
+    genre_name, genre_id = rows[i][1]
     condition = cols[j][1]
 
     genre_filter = build_genre_filter(genre_name, genre_id)
@@ -139,7 +139,7 @@ def is_valid_guess(game_name, i, j):
     query = f'''
     search "{game_name}";
     fields name;
-    where genres = ({genre_id})
+    where {genre_filter}
     & {condition};
     limit 1;
     '''
