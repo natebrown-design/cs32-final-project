@@ -77,7 +77,7 @@ def precache_cells(rows, cols):
         for j, (_, condition) in enumerate(cols):
 
             genre_filter = build_genre_filter(genre_name, genre_id)
-            
+
             query = f"""
             fields name;
             where {genre_filter} & {condition};
@@ -133,6 +133,8 @@ def is_valid_guess(game_name, i, j):
     # 2. authoritative IGDB check
     genre_id = rows[i][1]
     condition = cols[j][1]
+
+    genre_filter = build_genre_filter(genre_name, genre_id)
 
     query = f'''
     search "{game_name}";
