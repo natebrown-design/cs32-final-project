@@ -240,7 +240,7 @@ def disambiguate_game_name(game_name):
         choice = int(choice)
 
         if choice == 0:
-            return None
+            return guess
 
         if 1 <= choice <= len(results):
             return results[choice - 1]["name"].lower()
