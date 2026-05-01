@@ -47,6 +47,7 @@ COLUMNS = {
 }
 # ran into trouble with inconsistent tagging of games in the database (horror being under both genre and theme,
 # many horror games not counting since they are listed under the "horror" theme instead); led to helper function below
+# for two worst cases of this
 
 def build_genre_filter(genre_name, genre_id):
     # Special case for Horror
