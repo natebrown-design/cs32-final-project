@@ -290,7 +290,16 @@ def play_game():
                 print_board()
                 print(f"Cell: Row = '{row_tags[i]}', Column = '{col_tags[j]}'")
 
-                guess = input("Your guess: ").strip().lower()
+                guess = input("Your guess: ").strip()
+
+                # Try disambiguation
+                resolved_name = disambiguate_game_name(guess)
+
+                if resolved_name:
+                    guess = resolved_name.lower()
+                else:
+                    print("❗ Could not identify the game. Please try again!")
+                    continue
 
                 # prevents duplicate games from being used
                 if guess in used_games:
