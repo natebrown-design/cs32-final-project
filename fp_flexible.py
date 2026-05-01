@@ -180,7 +180,7 @@ def disambiguate_game_name(game_name):
         print(f"{len(local_matches) + 1}. Search more (API)")
 
         while True:
-            choice = input("\nEnter the number of the correct game: ").strip()
+            choice = input("\nEnter the number of the option you would like to select: ").strip()
 
             if not choice.isdigit():
                 print("Please enter a valid number.")
@@ -231,7 +231,7 @@ def disambiguate_game_name(game_name):
     print(f"{len(results) + 1}. Re-enter guess")
 
     while True:
-        choice = input("\nEnter the number of the correct game: ").strip()
+        choice = input("\nEnter the number of the option you would like to select: ").strip()
 
         if not choice.isdigit():
             print("Please enter a valid number.")
