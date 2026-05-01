@@ -131,7 +131,7 @@ def is_valid_guess(game_name, i, j):
         return True
 
     # 2. authoritative IGDB check
-    genre_name, genre_id = rows[i][1]
+    genre_name, genre_id = rows[i]
     condition = cols[j][1]
 
     genre_filter = build_genre_filter(genre_name, genre_id)
