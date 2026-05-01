@@ -3,7 +3,7 @@ import random
 import time
 import requests_cache
 import difflib
-from datetime import UTC
+from datetime import datetime, UTC
 
 CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
 ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
