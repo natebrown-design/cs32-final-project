@@ -43,6 +43,7 @@ COLUMNS = {
     "Music": 'genres = (7)',
     "Multiplayer": 'game_modes != null & game_modes = (2)'
 }
+# ran into trouble with inconsistent tagging of games in the database
 
 # --- CHECK IF COMBO HAS ANY GAME ---
 def has_games(genre_id, condition):
