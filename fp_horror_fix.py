@@ -325,7 +325,7 @@ def play_game():
                 if resolved_name:
                     guess = resolved_name.lower()
                 else:
-                    print("❗ Could not identify the game. Please try again!")
+                    print("Please input another guess!")
                     continue
 
                 # prevents duplicate games from being used
