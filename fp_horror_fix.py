@@ -100,7 +100,7 @@ def precache_cells(rows, cols):
 
 # --- GENERATE VALID GRID ---
 def generate_valid_grid():
-    genre_items = list(GENRES.items())
+    genre_items = list(GENRES.items()) # creates a list of tuples with the key-value pairs of the dictionary GENRES
     column_items = list(COLUMNS.items())
 
     while True:
