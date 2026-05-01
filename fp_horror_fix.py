@@ -41,7 +41,9 @@ COLUMNS = {
     "Roguelike": 'keywords = (113)',
     "Indie": 'genres = (32)',
     "Music": 'genres = (7)',
-    "Multiplayer": 'game_modes != null & game_modes = (2)'
+    "Multiplayer": 'game_modes != null & game_modes = (2)',
+    "Fantasy": '(themes = (17))',
+    "Sci-Fi": "(themes = (18))"
 }
 # ran into trouble with inconsistent tagging of games in the database (horror being under both genre and theme,
 # many horror games not counting since they are listed under the "horror" theme instead); led to helper function below
