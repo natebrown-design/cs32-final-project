@@ -217,6 +217,7 @@ def disambiguate_game_name(game_name):
         return guess
 
     print("\nDid you mean one of these?\n")
+    print(f"0. Use exactly \"{game_name}\"")
 
     for idx, game in enumerate(results):
         name = game.get("name", "Unknown")
