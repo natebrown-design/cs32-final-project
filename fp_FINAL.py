@@ -241,7 +241,8 @@ def disambiguate_game_name(game_name):
                 "name": results[choice - 1]["name"].lower()
             }
         elif choice == len(results) + 1:
-            return None
+            new_guess = input("Re-enter your guess: ").strip()
+            return disambiguate_game_name(new_guess)
 
 # --- INIT ---
 
@@ -302,7 +303,7 @@ def play_game():
                     print("❗ You've already used that game!\n")
                     continue
 
-                if is_valid_guess(game_id, i, j):
+                if is_valid_guess(game_id, game_name, i, j):
                     board[i][j] = game_name.title()
                     used_games.add(game_id)
                     score += 1
