@@ -292,10 +292,6 @@ def play_game():
 
                 resolved = disambiguate_game_name(guess_input)
 
-                if not resolved:
-                    print("❗ Not a valid game. Try again.")
-                    continue
-
                 game_id = resolved["id"]
                 game_name = resolved["name"]
 
@@ -310,6 +306,9 @@ def play_game():
                     print("✅ Correct!\n")
                     break
                 else:
+                    if game_id is None:  # exact typed guess, not found in DB
+                        print("❗ Game not found in database. Try again.\n")
+                        continue        # re-prompt instead of penalizing
                     board[i][j] = '❌'
                     print("❌ Does not fit tags. Incorrect!\n")
                     break
