@@ -108,24 +108,9 @@ def generate_valid_grid():
     genre_items = list(GENRES.items()) # creates a list of tuples with the key-value pairs of the dictionary GENRES
     column_items = list(COLUMNS.items())
 
-    while True:
-        rows = random.sample(genre_items, 3)
-        cols = random.sample(column_items, 3)
-
-        valid = True
-        for genre_name, g_id in rows:
-            for _, cond in cols:
-                if not has_games(genre_name, g_id, cond):
-                    valid = False
-                    break
-            if not valid:
-                break
-
-        if valid:
-            return rows, cols
-
-        time.sleep(0.2)
-
+    rows = random.sample(genre_items, 3)
+    cols = random.sample(column_items, 3)
+    return rows, cols
 
 # --- VALIDATE PLAYER GUESS ---
 def is_valid_guess(game_name, i, j):
