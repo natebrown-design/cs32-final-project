@@ -189,12 +189,12 @@ def disambiguate_game_name(game_name):
             if choice == 0:
                 # ONLY HERE we check database
                 if is_game_in_database(guess):
-                    return guess, True
+                    return guess
                 else:
-                    return None, False
+                    return None
 
             if 1 <= choice <= len(local_matches):
-                return local_matches[choice - 1], True
+                return local_matches[choice - 1]
 
             elif choice == len(local_matches) + 1:
                 break
@@ -210,7 +210,7 @@ def disambiguate_game_name(game_name):
     results = r.json() if r.status_code == 200 else []
 
     if not results:
-        return None, False
+        return None
 
     print("\nDid you mean one of these?\n")
     print(f"0. Use exactly \"{game_name}\"")
@@ -232,15 +232,15 @@ def disambiguate_game_name(game_name):
 
         if choice == 0:
             if is_game_in_database(guess):
-                return guess, True
+                return guess
             else:
-                return None, False
+                return None
 
         if 1 <= choice <= len(results):
-            return results[choice - 1]["name"].lower(), True
+            return results[choice - 1]["name"].lower()
 
         elif choice == len(results) + 1:
-            return None, False
+            return None
 
 # --- INIT GAME ---
 rows, cols, cell_answers = generate_valid_grid()
@@ -287,7 +287,7 @@ def play_game():
                 guess = input("Your guess: ").strip()
 
                 # Try disambiguation
-                resolved_name, is_real = disambiguate_game_name(guess)
+                resolved_name = disambiguate_game_name(guess)
 
                 if not resolved_name:
                     print("❗ Not a valid game. Try again.")
@@ -306,13 +306,10 @@ def play_game():
                     print("✅ Correct!\n")
                     break
 
-                elif is_real:
+                else:
                     board[i][j] = '❌'
                     print("❌ Game exists but does not match tags. Incorrect!\n")
                     break
-
-                else:
-                    print("❗ Game is not in database. Try again!")
 
     print_board()
     print(f"Game over! Final Score: {score}/9")
