@@ -222,6 +222,8 @@ def disambiguate_game_name(game_name):
         year = format_date(game.get("first_release_date"))
         print(f"{idx + 1}. {name} ({year})")
 
+    print(f"{len(results) + 1}. Re-enter guess")
+
     while True:
         choice = input("\nEnter your choice: ").strip()
 
@@ -238,7 +240,8 @@ def disambiguate_game_name(game_name):
                 "id": results[choice - 1]["id"],
                 "name": results[choice - 1]["name"].lower()
             }
-
+        elif choice == len(results) + 1:
+            return None
 
 # --- INIT ---
 
