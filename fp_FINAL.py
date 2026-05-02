@@ -317,13 +317,13 @@ def play_game():
                     print("✅ Correct!\n")
                     break
 
-                elif is_game_in_database(guess):
+                elif not guess:
+                    print("❗ Game is not in database. Try again! Please enter a valid game.")
+
+                else:
                     board[i][j] = '❌'
                     print("❌ Game does not match tags. Incorrect!\n")
                     break
-
-                else:
-                    print("❗ Game is not in database. Try again! Please enter a valid game.")
 
     print_board()
     print(f"Game over! Final Score: {score}/9")
