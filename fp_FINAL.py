@@ -88,27 +88,21 @@ def precache_cells(rows, cols):
 
 # --- GENERATE VALID GRID ---
 def generate_valid_grid():
-    genre_items = list(GENRES.items()) # creates a list of tuples with the key-value pairs of the dictionary GENRES
+    genre_items = list(GENRES.items())
     column_items = list(COLUMNS.items())
 
     while True:
         rows = random.sample(genre_items, 3)
         cols = random.sample(column_items, 3)
 
-        valid = True
-        for genre_name, g_id in rows:
-            for _, cond in cols:
-                if not has_games(genre_name, g_id, cond):
-                    valid = False
-                    break
-            if not valid:
-                break
+        # Fetch real data for this grid
+        cell_answers = precache_cells(rows, cols)
 
-        if valid:
-            return rows, cols
+        # Validate: every cell must have at least one valid game
+        if all(cell_answers[(i, j)] for i in range(3) for j in range(3)):
+            return rows, cols, cell_answers
 
-        time.sleep(0.2)
-
+        time.sleep(0.2) # ensures that we do not go over our free 4 API Calls a second from IGDB
 
 # --- VALIDATE PLAYER GUESS ---
 def is_valid_guess(game_name, i, j):
@@ -257,9 +251,7 @@ def disambiguate_game_name(game_name):
 
 
 # --- INIT GAME ---
-rows, cols = generate_valid_grid()
-
-cell_answers = precache_cells(rows, cols)
+rows, cols, cell_answers = generate_valid_grid()
 
 row_tags = [r[0] for r in rows]
 col_tags = [c[0] for c in cols]
@@ -267,7 +259,7 @@ col_tags = [c[0] for c in cols]
 # Track board state
 board = [[None for _ in range(3)] for _ in range(3)]
 
-# track score
+# Track score/used games to prevent duplicates
 score = 0
 used_games = set()
 
