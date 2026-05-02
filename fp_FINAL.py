@@ -123,7 +123,7 @@ def is_valid_guess(game_id, game_name, i, j):
     genre_filter = build_genre_filter(genre_name, genre_id)
 
     if game_id:
-        where_clause = f"id = {game_id} & {genre_filter} & {condition}"
+        where_clause = f"id = {game_id} & {genre_filter} & {condition}" # validation changed to ID based; was having problems with reboots of games like Silent Hill 2
     else:
         safe_name = game_name.replace('"', '\\"')
         where_clause = f"name ~ \"{safe_name}\" & {genre_filter} & {condition}"
@@ -292,7 +292,9 @@ def play_game():
 
                 resolved = disambiguate_game_name(guess_input)
 
-                
+                if resolved is None:
+                    print("❗ Game not found. Try again.\n")
+                    continue
 
                 game_id = resolved["id"]
                 game_name = resolved["name"]
