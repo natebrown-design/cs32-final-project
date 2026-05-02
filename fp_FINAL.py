@@ -189,7 +189,10 @@ def disambiguate_game_name(game_name):
             choice = int(choice)
 
             if choice == 0:
-                return guess # use exactly what is typed
+                if is_game_in_database(guess):
+                    return guess # use exactly what is typed
+                else:
+                    
 
             if 1 <= choice <= len(local_matches):
                 return local_matches[choice - 1]
