@@ -159,29 +159,29 @@ def disambiguate_game_name(game_name):
     all_cached_games = {}
     for cell in cell_answers.values():
         for gid, data in cell.items():
-            all_cached_games[gid] = data["name"]
+            all_cached_games[gid] = [data["name"], data["year"]]
 
     # --- Fuzzy match ---
     local_matches = difflib.get_close_matches(
         guess,
-        list(all_cached_games.values()),
+        [v[0] for v in all_cached_games.values()],
         n=10,
         cutoff=0.7
     )
 
     if local_matches:
         print("\nDid you mean one of these?\n")
-        print(f"0. Use exactly \"{game_name}\"")
+        print(f"0. Use EXACTLY \"{game_name}\"")
 
         matched_ids = [
-            gid for gid, name in all_cached_games.items()
-            if name in local_matches
+            gid for gid, data in all_cached_games.items()
+            if data[0] in local_matches
         ]
 
         for idx, gid in enumerate(matched_ids):
-            print(f"{idx + 1}. {all_cached_games[gid].title()}")
+            print(f"{idx + 1}. {all_cached_games[gid][0].title()} ({all_cached_games[gid][1]})")
 
-        print(f"{len(matched_ids) + 1}. Search more (API)")
+        print(f"{len(matched_ids) + 1}. SEARCH MORE (API)")
 
         while True:
             choice = input("\nEnter your choice: ").strip()
@@ -196,7 +196,7 @@ def disambiguate_game_name(game_name):
 
             if 1 <= choice <= len(matched_ids):
                 gid = matched_ids[choice - 1]
-                return {"id": gid, "name": all_cached_games[gid]}
+                return {"id": gid, "name": all_cached_games[gid][0]}
 
             elif choice == len(matched_ids) + 1:
                 break
@@ -215,14 +215,14 @@ def disambiguate_game_name(game_name):
         return None
 
     print("\nDid you mean one of these?\n")
-    print(f"0. Use exactly \"{game_name}\"")
+    print(f"0. Use EXACTLY \"{game_name}\"")
 
     for idx, game in enumerate(results):
         name = game.get("name", "Unknown")
         year = format_date(game.get("first_release_date"))
         print(f"{idx + 1}. {name} ({year})")
 
-    print(f"{len(results) + 1}. Re-enter guess")
+    print(f"{len(results) + 1}. RE-ENTER GUESS")
 
     while True:
         choice = input("\nEnter your choice: ").strip()
@@ -299,13 +299,16 @@ def play_game():
                 game_id = resolved["id"]
                 game_name = resolved["name"]
 
-                if game_id in used_games:
+                if game_id in used_games or game_name in used_games:
                     print("❗ You've already used that game!\n")
                     continue
 
                 if is_valid_guess(game_id, game_name, i, j):
                     board[i][j] = game_name.title()
-                    used_games.add(game_id)
+                    if game_id: # if not none
+                        used_games.add(game_id)
+                    else:
+                        used_games.add(game_name)
                     score += 1
                     print("✅ Correct!\n")
                     break
