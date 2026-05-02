@@ -38,7 +38,6 @@ COLUMNS = {
     "1990s (1990–1999)": "first_release_date >= 631152000 & first_release_date < 946684800",
     "2000s (2000–2009)": "first_release_date >= 946684800 & first_release_date < 1262304000", # had chatgpt help with the dates
     "2010s (2010–2019)": "first_release_date >= 1262304000 & first_release_date < 1577836800",
-    "Roguelike": 'keywords = (113)',
     "Indie": 'genres = (32)',
     "Music": 'genres = (7)',
     "Multiplayer": 'game_modes != null & game_modes = (2)',
