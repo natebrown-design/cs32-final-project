@@ -81,8 +81,13 @@ def precache_cells(rows, cols):
             data = r.json()
 
             # Store lowercase names for easier matching
-            names = {game["name"].lower() for game in data}
-            cell_answers[(i, j)] = names
+            cell_answers[(i, j)] = {
+                game["id"]: {
+                    "name": game["name"].lower(),
+                    "year": format_date(game.get("first_release_date"))
+                }
+                for game in data
+            }
 
     return cell_answers
 
