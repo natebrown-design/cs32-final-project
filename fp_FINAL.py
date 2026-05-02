@@ -167,8 +167,7 @@ def disambiguate_game_name(game_name):
     for names in cell_answers.values():
         all_cached_games.update(names)
 
-    # Get close matches from cached names
-    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7) # cutoff determines how exact of a match we require
+    local_matches = difflib.get_close_matches(guess, all_cached_games, n=10, cutoff=0.7)
 
     if local_matches:
         print("\nDid you mean one of these? (from cached games)\n")
@@ -180,29 +179,27 @@ def disambiguate_game_name(game_name):
         print(f"{len(local_matches) + 1}. Search more (API)")
 
         while True:
-            choice = input("\nEnter the number of the option you would like to select: ").strip()
+            choice = input("\nEnter your choice: ").strip()
 
             if not choice.isdigit():
-                print("Please enter a valid number.")
                 continue
 
             choice = int(choice)
 
             if choice == 0:
+                # ONLY HERE we check database
                 if is_game_in_database(guess):
-                    return guess # use exactly what is typed
+                    return guess, True
                 else:
-                    return None
+                    return None, False
 
             if 1 <= choice <= len(local_matches):
-                return local_matches[choice - 1]
+                return local_matches[choice - 1], True
 
             elif choice == len(local_matches) + 1:
-                break  # fall through to API search
+                break
 
-            print("Invalid selection.")
-
-    # --- 2. FALLBACK TO API SEARCH ---
+    # --- 2. API SEARCH ---
     query = f'''
     search "{game_name}";
     fields name, first_release_date;
@@ -210,48 +207,40 @@ def disambiguate_game_name(game_name):
     '''
 
     r = requests.post(URL, headers=HEADERS, data=query)
-
-    if r.status_code != 200:
-        return guess
-
-    results = r.json()
+    results = r.json() if r.status_code == 200 else []
 
     if not results:
-        return guess
+        return None, False
 
     print("\nDid you mean one of these?\n")
     print(f"0. Use exactly \"{game_name}\"")
 
     for idx, game in enumerate(results):
         name = game.get("name", "Unknown")
-
-        year = "Unknown"
-        if game.get("first_release_date"):
-            year = format_date(game["first_release_date"])
-
+        year = format_date(game.get("first_release_date"))
         print(f"{idx + 1}. {name} ({year})")
 
     print(f"{len(results) + 1}. Re-enter guess")
 
     while True:
-        choice = input("\nEnter the number of the option you would like to select: ").strip()
+        choice = input("\nEnter your choice: ").strip()
 
         if not choice.isdigit():
-            print("Please enter a valid number.")
             continue
 
         choice = int(choice)
 
         if choice == 0:
-            return guess
+            if is_game_in_database(guess):
+                return guess, True
+            else:
+                return None, False
 
         if 1 <= choice <= len(results):
-            return results[choice - 1]["name"].lower()
+            return results[choice - 1]["name"].lower(), True
+
         elif choice == len(results) + 1:
-            return None
-
-        print("Invalid selection.")
-
+            return None, False
 
 # --- INIT GAME ---
 rows, cols, cell_answers = generate_valid_grid()
@@ -298,13 +287,13 @@ def play_game():
                 guess = input("Your guess: ").strip()
 
                 # Try disambiguation
-                resolved_name = disambiguate_game_name(guess)
+                resolved_name, is_real = disambiguate_game_name(guess)
 
-                if resolved_name:
-                    guess = resolved_name.lower()
-                else:
-                    print("Please input another guess!")
+                if not resolved_name:
+                    print("❗ Not a valid game. Try again.")
                     continue
+
+                guess = resolved_name.lower()
 
                 # prevents duplicate games from being used
                 if guess in used_games:
@@ -317,13 +306,13 @@ def play_game():
                     print("✅ Correct!\n")
                     break
 
-                elif not guess:
-                    print("❗ Game is not in database. Try again! Please enter a valid game.")
+                elif is_real:
+                    board[i][j] = '❌'
+                    print("❌ Game exists but does not match tags. Incorrect!\n")
+                    break
 
                 else:
-                    board[i][j] = '❌'
-                    print("❌ Game does not match tags. Incorrect!\n")
-                    break
+                    print("❗ Game is not in database. Try again!")
 
     print_board()
     print(f"Game over! Final Score: {score}/9")
