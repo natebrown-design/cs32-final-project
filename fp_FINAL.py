@@ -125,7 +125,7 @@ def is_valid_guess(game_id, game_name, i, j):
     if game_id:
         where_clause = f"id = {game_id} & {genre_filter} & {condition}" # validation changed to ID based; was having problems with reboots of games like Silent Hill 2
     else:
-        safe_name = game_name.replace('"', '\\"')
+        safe_name = game_name.replace('"', '\\"') # for instances where game_id = None (exact user guesses)
         where_clause = f"name ~ \"{safe_name}\" & {genre_filter} & {condition}"
 
     query = f"""
