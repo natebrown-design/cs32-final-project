@@ -141,7 +141,7 @@ def is_game_in_database(game_name):
     query = f'''
     search "{game_name}";
     fields name;
-    limit 1;
+    limit 10;
     '''
 
     r = requests.post(URL, headers=HEADERS, data=query)
