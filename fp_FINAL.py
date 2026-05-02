@@ -134,7 +134,7 @@ def is_valid_guess(game_name, i, j):
 
     return any(game["name"].lower() == guess for game in data) # enforce exact match
 
-# --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT ---
+# --- CHECK TO DETERMINE IF INCORRECT GUESS IS IN THE DATA BASE OR NOT (only needed when using exact answer) ---
 def is_game_in_database(game_name):
     guess = game_name.strip().lower()
 
@@ -192,7 +192,7 @@ def disambiguate_game_name(game_name):
                 if is_game_in_database(guess):
                     return guess # use exactly what is typed
                 else:
-                    
+
 
             if 1 <= choice <= len(local_matches):
                 return local_matches[choice - 1]
