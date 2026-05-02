@@ -57,22 +57,6 @@ def build_genre_filter(genre_name, genre_id):
 
     return f"genres = ({genre_id})"
 
-# --- CHECK IF COMBO HAS ANY GAME ---
-def has_games(genre_name, genre_id, condition):
-
-    genre_filter = build_genre_filter(genre_name, genre_id)
-
-    query = f"""
-    fields name;
-    where {genre_filter} & {condition};
-    limit 1;
-    """
-
-    r = requests.post(URL, headers=HEADERS, data=query)
-    if r.status_code != 200:
-        return False
-    return len(r.json()) > 0
-
 # --- PRECACHE SET OF VALID GAMES SO API ISN'T CALLED LIVE DURING GAMEPLAY ---
 def precache_cells(rows, cols):
     cell_answers = {}
