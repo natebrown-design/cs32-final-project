@@ -113,33 +113,33 @@ def generate_valid_grid():
 
 # --- VALIDATION (ID-BASED) ---
 
-def is_valid_guess(game_id, i, j):
-    # Fast path: already in precache
-    if game_id in cell_answers[(i, j)]:
+def is_valid_guess(game_id, game_name, i, j):
+    # Fast path: already in precache by ID
+    if game_id and game_id in cell_answers[(i, j)]:
         return True
 
-    # Slow path: game came from API search, not precache
-    # Re-query IGDB to check if it satisfies this cell's filters
     genre_name, genre_id = rows[i]
     _, condition = cols[j]
-
     genre_filter = build_genre_filter(genre_name, genre_id)
+
+    if game_id:
+        where_clause = f"id = {game_id} & {genre_filter} & {condition}"
+    else:
+        safe_name = game_name.replace('"', '\\"')
+        where_clause = f"name ~ \"{safe_name}\" & {genre_filter} & {condition}"
 
     query = f"""
     fields id, name, first_release_date;
-    where id = {game_id} & {genre_filter} & {condition};
+    where {where_clause};
     limit 1;
     """
 
     r = requests.post(URL, headers=HEADERS, data=query)
-
     if r.status_code != 200:
         return False
 
     data = r.json()
-
     if data:
-        # Add to cache so future lookups are instant
         game = data[0]
         cell_answers[(i, j)][game["id"]] = {
             "name": game["name"].lower(),
