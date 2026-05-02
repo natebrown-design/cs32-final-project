@@ -192,7 +192,7 @@ def disambiguate_game_name(game_name):
             choice = int(choice)
 
             if choice == 0:
-                break
+                return {"id": None, "name": game_name}  # was just: break
 
             if 1 <= choice <= len(matched_ids):
                 gid = matched_ids[choice - 1]
@@ -215,7 +215,7 @@ def disambiguate_game_name(game_name):
         return None
 
     print("\nDid you mean one of these?\n")
-    print(f"0. Cancel")
+    print(f"0. Use exactly \"{game_name}\"")
 
     for idx, game in enumerate(results):
         name = game.get("name", "Unknown")
@@ -231,7 +231,7 @@ def disambiguate_game_name(game_name):
         choice = int(choice)
 
         if choice == 0:
-            return None
+            return {"id": None, "name": game_name}
 
         if 1 <= choice <= len(results):
             return {
