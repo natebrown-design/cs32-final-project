@@ -5,8 +5,8 @@ import requests_cache
 import difflib
 from datetime import datetime, UTC
 
-CLIENT_ID = "YOUR_CLIENT_ID"
-ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"
+CLIENT_ID = "qnanvz0eh3tpkl5o34ts4yhvhf20rb"
+ACCESS_TOKEN = "0lhonnd6ixx016aojoldnixiiw3vv3"
 
 URL = "https://api.igdb.com/v4/games"
 
