@@ -50,7 +50,7 @@ COLUMNS = {
     "Side-Scroller": "player_perspectives = (5) | player_perspectives = (3)",
     "Has DLC": "dlcs != null",
     "Part of Series": "collection != null",
-    "Nintendo": "platforms = (130)",
+    "Released on Nintendo Switch": "platforms = (130)",
 }
 
 # --- HELPERS ---
