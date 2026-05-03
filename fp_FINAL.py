@@ -26,7 +26,10 @@ GENRES = {
     "Platformer": 8,
     "Fighting": 4,
     "Survival": 33,
-    "Horror": 32
+    "Horror": 32,
+    "Racing": 10,
+    "Sport": 14,
+    "Hack & Slash": 25
 }
 
 COLUMNS = {
@@ -41,10 +44,12 @@ COLUMNS = {
     "Multiplayer": 'game_modes != null & game_modes = (2)',
     "Fantasy": '(themes = (17))',
     "Sci-Fi": "(themes = (18))",
-    "First Person":  "player_perspectives = (1)",
-    "Third Person":  "player_perspectives = (2)",
-    "Top-Down":      "player_perspectives = (3)",
+    "First Person": "player_perspectives = (1)",
+    "Third Person": "player_perspectives = (2)",
+    "Top-Down": "player_perspectives = (3)",
     "Side-Scroller": "player_perspectives = (5)",
+    "Has DLC": "dlcs != null",
+    "Part of Series": "collection != null",
 }
 
 # --- HELPERS ---
