@@ -40,7 +40,11 @@ COLUMNS = {
     "Music": 'genres = (7)',
     "Multiplayer": 'game_modes != null & game_modes = (2)',
     "Fantasy": '(themes = (17))',
-    "Sci-Fi": "(themes = (18))"
+    "Sci-Fi": "(themes = (18))",
+    "First Person":  "player_perspectives = (1)",
+    "Third Person":  "player_perspectives = (2)",
+    "Top-Down":      "player_perspectives = (3)",
+    "Side-Scroller": "player_perspectives = (5)",
 }
 
 # --- HELPERS ---
