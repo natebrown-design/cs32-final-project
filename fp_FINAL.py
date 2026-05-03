@@ -47,7 +47,7 @@ COLUMNS = {
     "First Person": "player_perspectives = (1)",
     "Third Person": "player_perspectives = (2)",
     "Top-Down": "player_perspectives = (3)",
-    "Side-Scroller": "player_perspectives = (5) | player_perspectives = (3)",
+    "Side-Scroller": "player_perspectives = (5) | player_perspectives = (3)", # bitwise operator | serves same purpose here
     "Part of Series": "collection != null",
     "Released on Nintendo Switch": "platforms = (130)",
 }
