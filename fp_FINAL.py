@@ -205,7 +205,7 @@ def disambiguate_game_name(game_name):
 
             if 1 <= choice <= len(matched_ids):
                 gid = matched_ids[choice - 1]
-                return {"id": gid, "name": all_cached_games[gid][0]} 
+                return {"id": gid, "name": all_cached_games[gid][0]}
 
             elif choice == len(matched_ids) + 1:
                 break
@@ -317,7 +317,7 @@ def play_game():
                     if game_id: # if not none
                         used_games.add(game_id)
                     else:
-                        used_games.add(game_name)
+                        used_games.add(game_name) # in the case where a player manually inputs a game
                     score += 1
                     print("✅ Correct!\n")
                     break
