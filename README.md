@@ -6,11 +6,9 @@ Set-Up Steps:
 - ensure that you have the requests_cache library installed; run 'pip install requests-cache' in terminal if not
 - MAKE SURE TO RUN fp_FINAL.py, as this is the most current correct file.
 
-This project is inspired by PokeDoku, a daily guessing game where the goal is to fill a 3x3 grid of pokemon where type is on the left, and specific attribute is on the right (combining the two in your selection). My project is a twist on this, instead using video games as the target input. I have pulled tagged data from a massive database of video games, with tags such as "adventure", "FPS", and "puzzle" for genre and 'release date' and 'popularity' for the column-wise description. These tags will be randomized every time the script is ran. If a player inputs a game that fulfills both the genre and the column requirement, then that game is saved in the space. A player is awarded a point for each grid space they answer correctly. I have also included a detailed disambiguation system, similar to the one used in Pset 5, 
+This project is inspired by PokeDoku, a daily guessing game where the goal is to fill a 3x3 grid of pokemon where type is on the left, and specific attribute is on the right (combining the two in your selection). My project is a twist on this, instead using video games as the target input. I have pulled tagged data from a massive database of video games, with tags such as "adventure", "FPS", and "puzzle" for genre and 'release date' and 'popularity' for the column-wise description. These tags will be randomized every time the script is ran. If a player inputs a game that fulfills both the genre and the column requirement, then that game is saved in the space. A player is awarded a point for each grid space they answer correctly. I have also included a detailed disambiguation system, similar to the one used in Pset 5, to help players input the game they are referring to.
 
 AS OF FINAL SUBMISSION:
 
-
-
 Generative AI Tools:
-ChatGPT was used to generate the board display (lines 136-146), as well as assist in understanding caching. ChatGPT also recommended the inclusion of a combination of pre-caching and live API queries mid gameplay, as initially including only pre-caching missed many popular games that fit in both the column and row tags when testing.
+ChatGPT was used to generate the board display (lines 272-284), as well as assist in understanding caching. ChatGPT also recommended the inclusion of a combination of pre-caching and live API queries mid gameplay, as initially including only pre-caching missed many popular games that fit in both the column and row tags when testing. ChatGPT and Claude assisted in structuring the queries to the API, providing the ID numbers for each genre/column condition.
