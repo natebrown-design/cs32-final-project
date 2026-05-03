@@ -59,7 +59,7 @@ def format_date(timestamp):
         return "Unknown"
     return datetime.fromtimestamp(timestamp, UTC).strftime("%Y")
 
-def build_genre_filter(genre_name, genre_id):
+def build_genre_filter(genre_name, genre_id): # here purely due to the two pesky genres below
     if genre_name == "Horror":
         return f"(genres = ({genre_id}) | themes = (19))"
     if genre_name == "Survival":
@@ -177,7 +177,7 @@ def disambiguate_game_name(game_name):
         guess,
         [v[0] for v in all_cached_games.values()], # specifically looks for close name matches
         n=10,
-        cutoff=0.7
+        cutoff=0.7 # cutoff determines how close of a match we require
     )
 
     if local_matches:
