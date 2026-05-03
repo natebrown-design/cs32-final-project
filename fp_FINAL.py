@@ -76,7 +76,7 @@ def precache_cells(rows, cols):
         for j, (_, condition) in enumerate(cols):
 
             genre_filter = build_genre_filter(genre_name, genre_id)
-
+            # chat gpt helped me to format the API queries
             query = f"""
             fields id, name, first_release_date;
             where {genre_filter} & {condition};
