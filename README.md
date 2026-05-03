@@ -4,9 +4,9 @@ My CS32 Final Project
 Set-Up Steps:
 - you must obtain a personal API access key by creating a Twitch developer account, and changing the "client_id" and "client_secret" key values in IGDB_API_access.py; then, replace the access token and client ID in fp_status with your own credentials
 - ensure that you have the requests_cache library installed; run 'pip install requests-cache' in terminal if not
-- MAKE SURE TO RUN fp_status.py, as this is the most current correct file.
+- MAKE SURE TO RUN fp_FINAL.py, as this is the most current correct file.
 
-This project is inspired by PokeDoku, a daily guessing game where the goal is to fill a 3x3 grid of pokemon where type is on the left, and specific attribute is on the right (combining the two in your selection). My project is a twist on this, instead using video games as the target input. I have pulled tagged data from a massive database of video games, with tags such as "adventure", "FPS", and "puzzle" for genre and 'release date' and 'popularity' for the column-wise description. These tags will be randomized every time the script is ran. If a player inputs a game that fulfills both the genre and the column requirement, then that game is saved in the space.
+This project is inspired by PokeDoku, a daily guessing game where the goal is to fill a 3x3 grid of pokemon where type is on the left, and specific attribute is on the right (combining the two in your selection). My project is a twist on this, instead using video games as the target input. I have pulled tagged data from a massive database of video games, with tags such as "adventure", "FPS", and "puzzle" for genre and 'release date' and 'popularity' for the column-wise description. These tags will be randomized every time the script is ran. If a player inputs a game that fulfills both the genre and the column requirement, then that game is saved in the space. A player is awarded a point for each grid space they answer correctly.
 
 AS OF FP STATUS:
 

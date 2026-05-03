@@ -66,6 +66,8 @@ def build_genre_filter(genre_name, genre_id):
         return f"(genres = ({genre_id}) | themes = (21))"
     return f"genres = ({genre_id})"
 
+# REMOVED has_games function; was using way too many small API calls right at the beginning of the script, swapped it out
+# with 'while' loop in generate_valid_grid checking to see if each precached grid space has at least one game in it
 
 # --- PRECACHE ---
 
