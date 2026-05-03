@@ -33,7 +33,7 @@ GENRES = {
 }
 
 COLUMNS = {
-    "Highly Rated (>85)": "rating > 85",
+    "Highly Rated (>80)": "rating > 80",
     "Recent (after 2020)": "first_release_date > 1577836800",
     "Popular (>100 ratings)": "rating_count > 100",
     "1990s (1990–1999)": "first_release_date >= 631152000 & first_release_date < 946684800",
