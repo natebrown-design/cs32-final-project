@@ -15,7 +15,7 @@ HEADERS = {
     "Authorization": f"Bearer {ACCESS_TOKEN}"
 }
 
-requests_cache.install_cache('igdb_cache', expire_after=86400, allowable_methods=('GET', 'POST'))
+requests_cache.install_cache('igdb_cache', expire_after=86400, allowable_methods=('GET', 'POST')) # the more you run the script, the faster the game gets!
 
 GENRES = {
     "Adventure": 31,
