@@ -334,6 +334,7 @@ def play_game():
     print_board()
     print(f"Game over! Final Score: {score}/9")
 
+# REMEMBER TO TALK ABOUT HOW PROJECT COULD BE IMPROVED
 
 # --- RUN ---
 
