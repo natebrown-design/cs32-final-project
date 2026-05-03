@@ -201,11 +201,11 @@ def disambiguate_game_name(game_name):
             choice = int(choice)
 
             if choice == 0:
-                return {"id": None, "name": game_name}  # was just: break
+                return {"id": None, "name": game_name}
 
             if 1 <= choice <= len(matched_ids):
                 gid = matched_ids[choice - 1]
-                return {"id": gid, "name": all_cached_games[gid][0]}
+                return {"id": gid, "name": all_cached_games[gid][0]} 
 
             elif choice == len(matched_ids) + 1:
                 break
