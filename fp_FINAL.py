@@ -180,7 +180,7 @@ def disambiguate_game_name(game_name):
         cutoff=0.7 # cutoff determines how close of a match we require
     )
 
-    if local_matches:
+    if local_matches: # if empty, move to API SEARCH
         print("\nDid you mean one of these?\n")
         print(f"0. Use EXACTLY \"{game_name}\"")
 
