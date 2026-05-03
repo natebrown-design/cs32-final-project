@@ -51,7 +51,6 @@ COLUMNS = {
     "Has DLC": "dlcs != null",
     "Part of Series": "collection != null",
     "Nintendo": "platforms = (130)",
-    
 }
 
 # --- HELPERS ---
