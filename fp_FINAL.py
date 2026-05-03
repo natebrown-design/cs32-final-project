@@ -91,7 +91,7 @@ def precache_cells(rows, cols):
 
             data = r.json()
 
-            cell_answers[(i, j)] = {
+            cell_answers[(i, j)] = { # switched to id based caching due to games with the same time (silent hill 2 example)
                 game["id"]: {
                     "name": game["name"].lower(),
                     "year": format_date(game.get("first_release_date"))
