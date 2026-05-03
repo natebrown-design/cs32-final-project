@@ -173,7 +173,7 @@ def disambiguate_game_name(game_name):
     # --- Fuzzy match ---
     local_matches = difflib.get_close_matches(
         guess,
-        [v[0] for v in all_cached_games.values()],
+        [v[0] for v in all_cached_games.values()], # specifically looks for close name matches
         n=10,
         cutoff=0.7
     )
